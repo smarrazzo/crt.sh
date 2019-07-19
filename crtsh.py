@@ -4,19 +4,17 @@ This is the (unofficial) Python API for crt.sh website.
 Using this code, you can retrieve subdomains.
 """
 
-import requests, json
+import requests, json, urllib
 
 class crtshAPI(object):
     """crtshAPI main handler."""
 
-    def search(self, domain, wildcard=True):
+    def search(self, query):
         """
         Search crt.sh for the given domain.
 
-        domain -- Domain to search for
-        wildcard -- Whether or not to prepend a wildcard to the domain
-                    (default: True)
-
+        query -- whatever to search for
+        
         Return a list of objects, like so:
 
         {
@@ -29,9 +27,8 @@ class crtshAPI(object):
         }
         """
         base_url = "https://crt.sh/?q={}&output=json"
-        if wildcard:
-            domain = "%25.{}".format(domain)
-        url = base_url.format(domain)
+        query = urllib.quote(query)
+        url = base_url.format(query)
 
         ua = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1'
         req = requests.get(url, headers={'User-Agent': ua})
